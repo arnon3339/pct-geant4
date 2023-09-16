@@ -51,11 +51,15 @@ The result of runBeam will be generated to /build/output directory for 0 - 90 de
 
 - The *<run number\>* is an optional. If you speficy it, it will create result directory corresponding to that number.
 
-## 3. Configure the simulation
+## 3. Results
+
+The result description of batch mode is in *readme.txt*.
+
+## 4. Configure the simulation
 
 ### - Number of primary
   
-In onloop.mac file
+In *onloop.mac* file
 
 ```text
 /run/beamOn <number of primary per a projection>
@@ -69,6 +73,5 @@ In run_loop.mac
 /control/loop onloop.mac angle <start angle> <end angle> <step> 
 ```
 
-The rotation of the phantom start rotating from *\<start angle\>* with *\<step\>* step angle until it reachs *\<end angle\>*. The result will be generated according to the number of rotation steps.
+The rotation of the phantom start rotating from *\<start angle\>* with *\<step\>* step angle until it reachs *\<end angle\>*. The *\<step\>* value can be omitted for stepping with 1 degree. The result will be generated according to the number of rotation steps.
 
-***Please not that:*** The *\<step\>* has to be greater than 1 degree. 

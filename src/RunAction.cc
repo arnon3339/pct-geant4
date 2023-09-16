@@ -56,7 +56,7 @@ namespace PCT
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(): csvOut(0)
+RunAction::RunAction(): csvOut(0), numOfRun(0)
 {
   // G4Random::setTheSeed(1);
   G4cout << "ooooooooooooooooooooooooooooo" << G4endl;
@@ -132,7 +132,6 @@ RunAction::~RunAction(){
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  auto detConstruction = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
   auto runAction = (ActionInitialization*)G4RunManager::GetRunManager()->GetUserActionInitialization();
   G4Random::setTheSeed(runAction->GetRunNum() + 1);
   std::ostringstream oss;
@@ -173,7 +172,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   auto analysisManager = G4AnalysisManager::Instance();
 
   std::ostringstream oss2;
-  oss2 << std::setw(3) << std::setfill('0') << static_cast<int>(detConstruction->GetPHangle());
+  oss2 << std::setw(3) << std::setfill('0') << static_cast<int>(numOfRun);
 
   analysisManager->OpenFile(output_root_dir + std::string("/projection_") +
     oss2.str()  + std::string(".root"));
@@ -206,6 +205,8 @@ void RunAction::EndOfRunAction(const G4Run*)
   analysisManager->CloseFile();
 
   csvOut->close();
+
+  numOfRun++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

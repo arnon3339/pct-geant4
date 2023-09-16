@@ -29,26 +29,3 @@
 #
 
 /control/loop onloop.mac angle 0 90
-
-
-
-#/det/rotate/angle 0
-#/run/beamOn 500
-#/det/rotate/angle 10
-#/run/beamOn 500
-#/det/rotate/angle 20
-#/run/beamOn 500
-#/det/rotate/angle 30
-#/run/beamOn 500
-#/det/rotate/angle 40
-#/run/beamOn 500
-#/det/rotate/angle 50
-#/run/beamOn 500
-#/det/rotate/angle 60
-#/run/beamOn 500
-#/det/rotate/angle 70
-#/run/beamOn 500
-#/det/rotate/angle 80
-#/run/beamOn 500
-#/det/rotate/angle 90
-#/run/beamOn 500

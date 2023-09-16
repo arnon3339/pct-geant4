@@ -52,6 +52,7 @@ class RunAction : public G4UserRunAction
 {
   private:
     std::ofstream* csvOut;
+    G4int numOfRun;
 
   public:
     RunAction();
@@ -61,7 +62,6 @@ class RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*) override;
 
     std::ofstream* get_csv_out() {return csvOut;};
-
 };
 
 }
