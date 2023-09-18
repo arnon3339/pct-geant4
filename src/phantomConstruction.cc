@@ -105,8 +105,8 @@ namespace PCT
       phanMat["Teflon"],
       "boxLog"
     );
-    // return C0log;
-    return boxLog;
+    return C0log;
+    // return boxLog;
   }
 
   void PhantomConstruction::genMat(std::map<std::string, G4Material*> &mat)
