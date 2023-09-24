@@ -72,88 +72,43 @@ void EventAction::EndOfEventAction(const G4Event* event)
   G4double detectorSizeX = (numAlpideX*alpideSizeX);
   G4double detectorSizeY = (numAlpideY*alpideSizeY);
 
-  // periodic printing
-
   G4int eventID = event->GetEventID();
-  auto runAction = (RunAction*)G4RunManager::GetRunManager()->GetUserRunAction();
-  auto csv_out = runAction->get_csv_out();
   auto analysisManager = G4AnalysisManager::Instance();
     G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
     TrackerHit* hit;
     G4bool isCollected = false;
-    if (hc->GetSize() > 0)
+   if (hc->GetSize() > 0)
     {
       for (size_t i = 0; i < hc->GetSize(); i++)
       {
         hit = (TrackerHit*)hc->GetHit(i);
+        if (hit->GetChamberNb() == -1) return;
         if (hit->GetRE() > 0) isCollected = true;
       }
 
       if (!isCollected) return;
 
-      G4int defEventID = -1;
-      G4double defPoses[] = {-1, -1, -1, -1, -1, -1, -1, -1, -1};
-
       for (size_t i = 0; i < hc->GetSize(); i++)
       {
         hit = (TrackerHit*)hc->GetHit(i);
-        switch (hit->GetChamberNb())
+        if (hit->GetChamberNb() < 4)
         {
-        case 0:
-          analysisManager->FillH1(0, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillH1(1, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillNtupleDColumn(1, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillNtupleDColumn(2, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillH2(0, hit->GetPos().getX() + detectorSizeX/2, hit->GetPos().getY() + detectorSizeY/2);
-          defPoses[0] = hit->GetPos().getX() + detectorSizeX/2;
-          defPoses[1] = hit->GetPos().getY() + detectorSizeY/2;
-          break;
-
-        case 1:
-          analysisManager->FillH1(2, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillH1(3, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillNtupleDColumn(3, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillNtupleDColumn(4, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillH2(1, hit->GetPos().getX() + detectorSizeX/2, hit->GetPos().getY() + detectorSizeY/2);
-          defPoses[2] = hit->GetPos().getX() + detectorSizeX/2;
-          defPoses[3] = hit->GetPos().getY() + detectorSizeY/2;
-          break;
-        
-        case 2:
-          analysisManager->FillH1(4, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillH1(5, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillNtupleDColumn(5, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillNtupleDColumn(6, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillH2(2, hit->GetPos().getX() + detectorSizeX/2, hit->GetPos().getY() + detectorSizeY/2);
-          defPoses[4] = hit->GetPos().getX() + detectorSizeX/2;
-          defPoses[5] = hit->GetPos().getY() + detectorSizeY/2;
-          break;
-
-        case 3:
-          analysisManager->FillH1(6, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillH1(7, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillNtupleDColumn(7, hit->GetPos().getX() + detectorSizeX/2);
-          analysisManager->FillNtupleDColumn(8, hit->GetPos().getY() + detectorSizeY/2);
-          analysisManager->FillH2(3, hit->GetPos().getX() + detectorSizeX/2, hit->GetPos().getY() + detectorSizeY/2);
-          defPoses[6] = hit->GetPos().getX() + detectorSizeX/2;
-          defPoses[7] = hit->GetPos().getY() + detectorSizeY/2;
-          break;
-
-        default:
-          analysisManager->FillH1(8, hit->GetRE());
-          analysisManager->FillNtupleDColumn(9, hit->GetRE());
-          defPoses[8] = hit->GetRE();
-          break;
+          analysisManager->FillH1(i, hit->GetPos().getX() + detectorSizeX/2);
+          analysisManager->FillH1(2*i + 1, hit->GetPos().getY() + detectorSizeY/2);
+          analysisManager->FillNtupleDColumn(2*i + 1, hit->GetPos().getX() + detectorSizeX/2);
+          analysisManager->FillNtupleDColumn(2*i + 2, hit->GetPos().getY() + detectorSizeY/2);
+          analysisManager->FillH2(i, hit->GetPos().getX() + detectorSizeX/2, hit->GetPos().getY() + detectorSizeY/2);
+        }
+        else
+        {
+          analysisManager->FillH1(9, hit->GetRE());
+          analysisManager->FillNtupleDColumn(10, hit->GetRE());
         }
       }  
-      defEventID = eventID;
+      analysisManager->FillH1(8, hit->GetAngle());
+      analysisManager->FillNtupleDColumn(9, hit->GetAngle());
       analysisManager->FillNtupleIColumn(0, eventID);
       analysisManager->AddNtupleRow();
-      *csv_out << defEventID << ", " <<
-                defPoses[0] << ", " << defPoses[1] << ", " << defPoses[2] << ", " <<
-                defPoses[3] << ", " << defPoses[4] << ", " << defPoses[5] << ", " <<
-                defPoses[6] << ", " << defPoses[7] << ", " << defPoses[8] << ", " <<
-                std::endl;
     }
 }
 

@@ -2,7 +2,6 @@
 # Setup the project
 cmake_minimum_required(VERSION 3.16...3.21)
 project(PCT)
-
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -74,8 +73,6 @@ foreach(_script ${PCT_DIRECTORY_SCRIPTS})
 endforeach()
 
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/output)
-file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/output/csv)
-file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/output/root)
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this
 # example standalone

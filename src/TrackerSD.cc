@@ -28,6 +28,9 @@
 /// \brief Implementation of the PCT::TrackerSD class
 
 #include "TrackerSD.hh"
+
+#include "DetectorConstruction.hh"
+
 #include "G4RunManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
@@ -76,6 +79,7 @@ void TrackerSD::Initialize(G4HCofThisEvent* hce)
 G4bool TrackerSD::ProcessHits(G4Step* aStep,
                                      G4TouchableHistory*)
 {
+  auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
   G4Track* track = aStep->GetTrack();
   if (track->GetParentID() != 0) return false;
   G4RunManager* runManager = G4RunManager::GetRunManager();
@@ -103,6 +107,7 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
   newHit->SetEdep(edep);
   newHit->SetKE(aStep->GetPreStepPoint()->GetKineticEnergy());
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
+  newHit->SetAngle(det->GetPHangle());
 
   if (myEvent->GetCurrentLayer() == 4) newHit->SetRE(aStep->GetPreStepPoint()->GetKineticEnergy());
   fHitsCollection->insert( newHit );

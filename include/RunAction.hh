@@ -51,17 +51,15 @@ namespace PCT
 class RunAction : public G4UserRunAction
 {
   private:
-    std::ofstream* csvOut;
-    G4int numOfRun;
+    const G4int& numOfRun;
 
   public:
-    RunAction();
+    RunAction() = default;
+    RunAction(const G4int&);
     ~RunAction();
 
     void BeginOfRunAction(const G4Run*) override;
     void   EndOfRunAction(const G4Run*) override;
-
-    std::ofstream* get_csv_out() {return csvOut;};
 };
 
 }

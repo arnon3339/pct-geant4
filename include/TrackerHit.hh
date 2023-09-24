@@ -70,6 +70,7 @@ class TrackerHit : public G4VHit
     void SetPos      (G4ThreeVector xyz){ fPos = xyz; };
     void SetKE       (G4double ke)      { fKE = ke; };
     void SetRE       (G4double re)      { fRE = re; };
+    void SetAngle    (G4double angle)   { fAngle = angle;};
 
     // Get methods
     G4int GetTrackID() const     { return fTrackID; };
@@ -77,11 +78,13 @@ class TrackerHit : public G4VHit
     G4double GetEdep() const     { return fEdep; };
     G4double GetKE() const     { return fKE; };
     G4double GetRE() const     { return fRE; };
+    G4double GetAngle() const { return fAngle; };
     G4ThreeVector GetPos() const { return fPos; };
 
   private:
     G4int         fTrackID = -1;
     G4int         fChamberNb = -1;
+    G4double      fAngle = -1;
     G4double      fKE = -1;
     G4double      fRE = -1;
     G4double      fEdep = 0.;

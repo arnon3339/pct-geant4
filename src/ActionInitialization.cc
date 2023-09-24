@@ -38,14 +38,13 @@
 namespace PCT
 {
 
-ActionInitialization::ActionInitialization(G4int num): runNum(num){}
+ActionInitialization::ActionInitialization(const G4int& runNum): fRunNum(runNum){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-  auto runAction = new RunAction;
-  SetUserAction(runAction);
+  SetUserAction(new RunAction(fRunNum));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +53,7 @@ void ActionInitialization::Build() const
 {
   SetUserAction(new PrimaryGeneratorAction);
 
-  SetUserAction(new RunAction);
+  SetUserAction(new RunAction(fRunNum));
 
   SetUserAction(new EventAction);
 

@@ -52,6 +52,8 @@ int main(int argc,char** argv)
   G4UIExecutive* ui = nullptr;
   if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
 
+  const G4int runNum = (argc == 3 && std::atoi(argv[2]) > 0) ? std::atoi(argv[2]) : 0;
+
   // Optionally: choose a different Random engine...
   // G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
@@ -64,6 +66,8 @@ int main(int argc,char** argv)
   auto* runManager =
     G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
+  G4Random::setTheSeed(runNum + 1);
+  
   // Set mandatory initialization classes
   //
   // Detector construction
@@ -72,17 +76,10 @@ int main(int argc,char** argv)
   // Physics list
   // G4VModularPhysicsList* physicsList = new QBBC;
   // physicsList->SetVerboseLevel(1);
-  runManager->SetUserInitialization(new PCT::PhysicsList);
+  runManager->SetUserInitialization(new PhysicsList);
 
   // User action initialization
-  if (argc == 3) {
-    G4cout << "4444444444444444" << G4endl;
-    G4cout << argv[2] << G4endl;
-    runManager->SetUserInitialization(new ActionInitialization(std::atoi(argv[2])));
-    }
-
-  else runManager->SetUserInitialization(new ActionInitialization(0));
-
+  runManager->SetUserInitialization(new ActionInitialization(runNum));
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;

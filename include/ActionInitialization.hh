@@ -42,17 +42,14 @@ namespace PCT
 class ActionInitialization : public G4VUserActionInitialization
 {
   private:
-    G4int runNum;
+    const G4int fRunNum;
   public:
+    ActionInitialization(const G4int&);
     ActionInitialization() = default;
-    ActionInitialization(G4int);
     ~ActionInitialization() override = default;
 
     void BuildForMaster() const override;
     void Build() const override;
-
-    void SetRunNum(G4int num) {runNum = num;};
-    G4int GetRunNum() {return runNum;};
 };
 
 }

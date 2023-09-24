@@ -56,14 +56,8 @@ namespace PCT
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(): csvOut(0), numOfRun(0)
+RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 {
-  // G4Random::setTheSeed(1);
-  G4cout << "ooooooooooooooooooooooooooooo" << G4endl;
-  G4cout << "ooooooooooooooooooooooooooooo" << G4endl;
-  G4cout << "ooooooooooooooooooooooooooooo" << G4endl;
-  // add new units for dose
-  //
   const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
   const G4double nanogray  = 1.e-9*gray;
@@ -92,7 +86,8 @@ RunAction::RunAction(): csvOut(0), numOfRun(0)
   analysisManager->CreateH1("PosX3", "X position hit in layer 3", 100, 0, detectorSizeX);
   analysisManager->CreateH1("PosY3", "Y position hit in layer 3", 100, 0, detectorSizeY);
 
-  analysisManager->CreateH1("RE", "Rasidual energy", 100, 0, 200);
+  analysisManager->CreateH1("Angle", "The projection angle", 100, 0, 180);
+  analysisManager->CreateH1("RE", "Rasidual energy", 100, 0, 200 *MeV);
 
   analysisManager->CreateH2("Posxy0", "XY position hit in layer 0", 
                             100, 0, detectorSizeX, 100, 0, detectorSizeY,
@@ -117,71 +112,32 @@ RunAction::RunAction(): csvOut(0), numOfRun(0)
   analysisManager->CreateNtupleDColumn("posY2");
   analysisManager->CreateNtupleDColumn("posX3");
   analysisManager->CreateNtupleDColumn("posY3");
+  analysisManager->CreateNtupleDColumn("angle");
   analysisManager->CreateNtupleDColumn("RE");
   analysisManager->FinishNtuple();
 
-  csvOut = new std::ofstream();
-  // analysisManager->CreateNtupleDColumn("parentID");
+  std::string output_root_dir = "./output";
+
+  std::ostringstream oss;
+  oss << std::setw(3) << std::setfill('0') << numOfRun;
+
+  analysisManager->OpenFile(output_root_dir + std::string("/run_") +
+    oss.str()  + std::string(".root"));
+
 }
 
-RunAction::~RunAction(){
-  delete csvOut;
+RunAction::~RunAction()
+{
+  auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
+  analysisManager->CloseFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  auto runAction = (ActionInitialization*)G4RunManager::GetRunManager()->GetUserActionInitialization();
-  G4Random::setTheSeed(runAction->GetRunNum() + 1);
-  std::ostringstream oss;
-  oss << std::setw(5) << std::setfill('0') << runAction->GetRunNum();
-  std::string output_root_dir = "./output/root/run_" + oss.str();
-  std::string output_csv_dir = "./output/csv/run_" + oss.str();
-
-  if (!fs::exists(output_root_dir))
-  {
-    try
-    {
-      fs::create_directory(output_root_dir);
-      G4cout << output_root_dir << " output directory was created." << G4endl;
-    }
-    catch(const std::exception& e)
-    {
-      std::cerr << "Error to create " << output_root_dir << " directory!: " << e.what() << '\n';
-    }
-  }
-  else G4cout << output_root_dir << " directory already exist." << G4endl;
-
-  if (!fs::exists(output_csv_dir))
-  {
-    try
-    {
-      fs::create_directory(output_csv_dir);
-      G4cout << output_csv_dir << " output directory was created." << G4endl;
-    }
-    catch(const std::exception& e)
-    {
-      std::cerr << "Error to create " << output_csv_dir << " directory!: " << e.what() << '\n';
-    }
-  }
-  else G4cout << output_csv_dir << " directory already exist." << G4endl;
-
-  // inform the runManager to save random number seed
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-  auto analysisManager = G4AnalysisManager::Instance();
-
-  std::ostringstream oss2;
-  oss2 << std::setw(3) << std::setfill('0') << static_cast<int>(numOfRun);
-
-  analysisManager->OpenFile(output_root_dir + std::string("/projection_") +
-    oss2.str()  + std::string(".root"));
-
-  csvOut->open(output_csv_dir + std::string("/projection_") +
-    oss2.str()  + std::string(".csv"), std::ios::out);
-
-  *csvOut << "eventID, posX0, posY0, posX1, posY1, posX2, posY2, posX3, posY3, resE" << std::endl;
-
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -189,24 +145,6 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
 
-  auto analysisManager = G4AnalysisManager::Instance();
-
-  // G4cout << "XXXXXXXXXXXXXX" << G4endl;
-  // G4cout << analysisManager->GetNofNtuples() << G4endl;
-
-  // for (int i = 0; i < 1000; i++)
-  // {
-  //   analysisManager->FillNtupleDColumn(0, i);
-  //   analysisManager->AddNtupleRow();
-  // }
-
-     
-  analysisManager->Write();
-  analysisManager->CloseFile();
-
-  csvOut->close();
-
-  numOfRun++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
