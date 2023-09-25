@@ -14,11 +14,14 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+find_package(ROOT)
+
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
 #
 include(${Geant4_USE_FILE})
+include(${ROOT_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 #----------------------------------------------------------------------------
@@ -32,7 +35,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(examplePCT examplePCT.cc ${sources} ${headers})
-target_link_libraries(examplePCT ${Geant4_LIBRARIES})
+target_link_libraries(examplePCT ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

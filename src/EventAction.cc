@@ -76,24 +76,25 @@ void EventAction::EndOfEventAction(const G4Event* event)
   auto analysisManager = G4AnalysisManager::Instance();
     G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
     TrackerHit* hit;
-    G4bool isCollected = false;
-   if (hc->GetSize() > 0)
+    G4bool found0 = false;
+    G4bool found1 = false;
+   if (hc->GetSize() > 1)
     {
       for (size_t i = 0; i < hc->GetSize(); i++)
       {
         hit = (TrackerHit*)hc->GetHit(i);
-        if (hit->GetChamberNb() == -1) return;
-        if (hit->GetRE() > 0) isCollected = true;
+        if (hit->GetChamberNb() == 0) found0 = true;
+        if (hit->GetChamberNb() == 1) found1 = true;
       }
 
-      if (!isCollected) return;
+      if (!found0 || !found1) return;
 
       for (size_t i = 0; i < hc->GetSize(); i++)
       {
         hit = (TrackerHit*)hc->GetHit(i);
         if (hit->GetChamberNb() < 4)
         {
-          analysisManager->FillH1(i, hit->GetPos().getX() + detectorSizeX/2);
+          analysisManager->FillH1(2*i, hit->GetPos().getX() + detectorSizeX/2);
           analysisManager->FillH1(2*i + 1, hit->GetPos().getY() + detectorSizeY/2);
           analysisManager->FillNtupleDColumn(2*i + 1, hit->GetPos().getX() + detectorSizeX/2);
           analysisManager->FillNtupleDColumn(2*i + 2, hit->GetPos().getY() + detectorSizeY/2);
@@ -105,6 +106,11 @@ void EventAction::EndOfEventAction(const G4Event* event)
           analysisManager->FillNtupleDColumn(10, hit->GetRE());
         }
       }  
+      if (hc->GetSize() < 5)
+      {
+        analysisManager->FillH1(9, 0);
+        analysisManager->FillNtupleDColumn(10, 0);
+      }
       analysisManager->FillH1(8, hit->GetAngle());
       analysisManager->FillNtupleDColumn(9, hit->GetAngle());
       analysisManager->FillNtupleIColumn(0, eventID);

@@ -28,4 +28,4 @@
 #/tracking/verbose 2
 #
 /det/rotate/angle 10
-/run/beamOn 1
+/run/beamOn 10000
