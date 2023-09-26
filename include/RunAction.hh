@@ -36,6 +36,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <mutex>
 
 class G4Run;
 class RunMessager;
@@ -57,6 +58,8 @@ class RunAction : public G4UserRunAction
     const G4int& numOfRun;
     G4bool  _close_file{false};
     RunMessager* _run_messager;
+
+    std::mutex* _mutex;
 
   public:
     RunAction() = default;

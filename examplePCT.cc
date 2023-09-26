@@ -106,9 +106,9 @@ int main(int argc,char** argv)
     delete ui;
   }
 
-  auto analysis = Analysis::GetInstance("pCT", "./output");
+  // auto analysis = Analysis::GetInstance("pCT", "./output");
 
-  analysis->GenOutFile("./output.root");
+  // analysis->GenOutFile("./output.root");
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   // owned and deleted by the run manager, so they should not be deleted

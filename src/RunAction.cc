@@ -117,19 +117,11 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
   analysisManager->CreateNtupleDColumn("RE");
   analysisManager->FinishNtuple();
 
-
-  std::string output_root_dir = "./output";
-
-  std::ostringstream oss;
-  oss << std::setw(3) << std::setfill('0') << numOfRun;
-
-  analysisManager->OpenFile(output_root_dir + std::string("/run_") +
-    oss.str()  + std::string(".root"));
-  
 }
 
 RunAction::~RunAction()
 {
+  delete _mutex;
   delete _run_messager;
 }
 
@@ -137,6 +129,18 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
+  auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+  auto analysisManager = G4AnalysisManager::Instance();
+  std::string output_root_dir = "./output";
+
+  std::ostringstream oss;
+  oss << std::setw(3) << std::setfill('0') << numOfRun;
+  std::ostringstream oss2;
+  oss2 << std::setw(3) << std::setfill('0') << numOfRun;
+
+
+  analysisManager->OpenFile(output_root_dir + std::string("/run_") +
+    oss.str() + "_project_" + std::to_string(det->GetPHangle()) + std::string(".root"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOo {_close_file = close_file;}oo........oooOO0OOooo......
@@ -144,13 +148,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-  if (static_cast<int>(det->GetPHangle()) == 180)
-  {
-    G4cout << "...... Finished in projection of " << det->GetPHangle() << " degree ......" << G4endl;
-    auto analysisManager = G4AnalysisManager::Instance();
-    analysisManager->Write();
-    analysisManager->CloseFile();
-  }
+  G4cout << "...... Finished in projection of " << det->GetPHangle() << " degree ......" << G4endl;
+  auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
+  analysisManager->CloseFile();
 }
 
 

@@ -343,8 +343,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   void DetectorConstruction::RotatePhantom(G4double angle)
   {
-    G4cout << "...... Finished in projection of " << phAngle << " degree ......" << G4endl;
-
     auto runManager = G4RunManager::GetRunManager();
     phAngle = angle;
 
