@@ -49,8 +49,6 @@ void Analysis::GenOutFile(const std::string& fpath)
     }
     outputTree->Write();
     outputFile->Close();
-    std::cout << "I have a root output!" << std::endl;
-
 }
 
 } // namespace PCT

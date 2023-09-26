@@ -38,6 +38,7 @@
 #include <fstream>
 
 class G4Run;
+class RunMessager;
 
 /// Run action class
 ///
@@ -48,10 +49,14 @@ class G4Run;
 namespace PCT
 {
 
+class RunMessager;
+
 class RunAction : public G4UserRunAction
 {
   private:
     const G4int& numOfRun;
+    G4bool  _close_file{false};
+    RunMessager* _run_messager;
 
   public:
     RunAction() = default;
@@ -60,6 +65,7 @@ class RunAction : public G4UserRunAction
 
     void BeginOfRunAction(const G4Run*) override;
     void   EndOfRunAction(const G4Run*) override;
+
 };
 
 }

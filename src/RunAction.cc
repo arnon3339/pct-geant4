@@ -31,6 +31,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"
+#include "RunMessager.hh"
 // #include "Run.hh"
 
 #include "G4RunManager.hh"
@@ -49,8 +50,6 @@
 #include <sstream>
 #include <fstream>
 
-namespace fs = std::filesystem;
-
 namespace PCT
 {
 
@@ -58,6 +57,8 @@ namespace PCT
 
 RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 {
+  _run_messager = new RunMessager(this);
+
   const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
   const G4double nanogray  = 1.e-9*gray;
@@ -116,6 +117,7 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
   analysisManager->CreateNtupleDColumn("RE");
   analysisManager->FinishNtuple();
 
+
   std::string output_root_dir = "./output";
 
   std::ostringstream oss;
@@ -123,30 +125,34 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 
   analysisManager->OpenFile(output_root_dir + std::string("/run_") +
     oss.str()  + std::string(".root"));
-
+  
 }
 
 RunAction::~RunAction()
 {
+  delete _run_messager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOo {_close_file = close_file;}oo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  auto analysisManager = G4AnalysisManager::Instance();
-  analysisManager->Write();
-  analysisManager->CloseFile();
-
-
+  auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+  if (static_cast<int>(det->GetPHangle()) == 180)
+  {
+    G4cout << "...... Finished in projection of " << det->GetPHangle() << " degree ......" << G4endl;
+    auto analysisManager = G4AnalysisManager::Instance();
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
