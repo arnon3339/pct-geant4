@@ -86,9 +86,8 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
   analysisManager->CreateH1("PosY2", "Y position hit in layer 2", 100, 0, detectorSizeY);
   analysisManager->CreateH1("PosX3", "X position hit in layer 3", 100, 0, detectorSizeX);
   analysisManager->CreateH1("PosY3", "Y position hit in layer 3", 100, 0, detectorSizeY);
-
-  analysisManager->CreateH1("Angle", "The projection angle", 100, 0, 180);
-  analysisManager->CreateH1("RE", "Rasidual energy", 100, 0, 200 *MeV);
+  analysisManager->CreateH1("PosX4", "X position hit in layer 4", 100, 0, detectorSizeX);
+  analysisManager->CreateH1("PosY4", "Y position hit in layer 4", 100, 0, detectorSizeY);
 
   analysisManager->CreateH2("Posxy0", "XY position hit in layer 0", 
                             100, 0, detectorSizeX, 100, 0, detectorSizeY,
@@ -102,17 +101,15 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
   analysisManager->CreateH2("Posxy3", "XY position hit in layer 3", 
                             100, 0, detectorSizeX, 100, 0, detectorSizeY,
                             "cm", "cm");
+  analysisManager->CreateH2("Posxy4", "XY position hit in layer 4", 
+                            100, 0, detectorSizeX, 100, 0, detectorSizeY,
+                            "cm", "cm");
   
   analysisManager->CreateNtuple("pCT", "Track and rasidual energy");
   analysisManager->CreateNtupleIColumn("eventID");
-  analysisManager->CreateNtupleDColumn("posX0");
-  analysisManager->CreateNtupleDColumn("posY0");
-  analysisManager->CreateNtupleDColumn("posX1");
-  analysisManager->CreateNtupleDColumn("posY1");
-  analysisManager->CreateNtupleDColumn("posX2");
-  analysisManager->CreateNtupleDColumn("posY2");
-  analysisManager->CreateNtupleDColumn("posX3");
-  analysisManager->CreateNtupleDColumn("posY3");
+  analysisManager->CreateNtupleDColumn("posX");
+  analysisManager->CreateNtupleDColumn("posY");
+  analysisManager->CreateNtupleDColumn("layerID");
   analysisManager->CreateNtupleDColumn("angle");
   analysisManager->CreateNtupleDColumn("RE");
   analysisManager->FinishNtuple();

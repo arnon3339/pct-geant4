@@ -109,7 +109,11 @@ G4bool TrackerSD::ProcessHits(G4Step* aStep,
   newHit->SetPos (aStep->GetPostStepPoint()->GetPosition());
   newHit->SetAngle(det->GetPHangle());
 
-  if (myEvent->GetCurrentLayer() == 4) newHit->SetRE(aStep->GetPreStepPoint()->GetKineticEnergy());
+  if (myEvent->GetCurrentLayer() == 4) 
+    newHit->SetRE(aStep->GetPreStepPoint()->GetKineticEnergy());
+  else
+    newHit->SetRE(0);
+
   fHitsCollection->insert( newHit );
   if (myEvent->GetCurrentLayer() == 4) track->SetTrackStatus(fStopAndKill);
 
