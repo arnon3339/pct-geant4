@@ -1,0 +1,3 @@
+/gps/pos/centre {dist} 0. -28.75. cm
+/run/file/maxLength {dist} cm
+/run/beamOn 10
