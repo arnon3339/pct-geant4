@@ -33,6 +33,7 @@
 #include "G4UserRunAction.hh"
 #include "G4Accumulable.hh"
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <iostream>
 #include <fstream>
@@ -56,10 +57,10 @@ class RunAction : public G4UserRunAction
 {
   private:
     const G4int& numOfRun;
-    G4bool  _close_file{false};
-    RunMessager* _run_messager;
-
-    std::mutex* _mutex;
+    G4bool  fCloseFile{false};
+    G4bool  fOpenFile{false};
+    G4double fMaxLength{0.0 *mm};
+    RunMessager* fRunMessager;
 
   public:
     RunAction() = default;
@@ -68,6 +69,10 @@ class RunAction : public G4UserRunAction
 
     void BeginOfRunAction(const G4Run*) override;
     void   EndOfRunAction(const G4Run*) override;
+
+    void SetCloseFile(G4bool closeFile) {fCloseFile = closeFile;};
+    void SetOpenFile(G4bool openFile) {fOpenFile = openFile;};
+    void SetMaxLength(G4double maxLength) {fMaxLength = maxLength;};
 
 };
 

@@ -4,7 +4,7 @@
 # or interactively: Idle> /control/execute run1.mac
 #
 # Change the default number of workers (in multi-threading mode) 
-/run/numberOfThreads 16
+#/run/numberOfThreads 16
 #
 # Initialize kernel
 /run/initialize
@@ -28,4 +28,35 @@
 #/tracking/verbose 2
 #
 
+/gps/pos/shape Circle
+/gps/pos/centre 0. 0. -28.75. cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 0.4 mm
+/gps/particle proton
+#/gps/particle ion
+#/gps/ion 6 12 6
+/gps/pos/type Beam
+
+# the incident surface is in the y-z plane
+#
+/gps/pos/rot1 1 0 0
+/gps/pos/rot2 0 1 0 
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+/gps/ang/rot1 0 1 0 
+/gps/ang/rot2 1 0 0
+/gps/ang/type beam1d
+/gps/ang/sigma_r 0.5 deg
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 200.0 MeV
+/gps/ene/sigma 0.1 MeV
+#/gps/ene/mono 744 MeV
+#/gps/ene/sigma 0.740 MeV
+
 /control/loop onloop.mac angle 0 180
+#/run/file/close true
+#/run/beamOn 10000

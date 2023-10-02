@@ -57,7 +57,7 @@ namespace PCT
 
 RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 {
-  _run_messager = new RunMessager(this);
+  fRunMessager = new RunMessager(this);
 
   const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
@@ -78,16 +78,16 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 
   auto analysisManager = G4AnalysisManager::Instance();
 
-  analysisManager->CreateH1("PosX0", "X position hit in layer 0", 100, 0, detectorSizeX);
-  analysisManager->CreateH1("PosY0", "Y position hit in layer 0", 100, 0, detectorSizeY);
-  analysisManager->CreateH1("PosX1", "X position hit in layer 1", 100, 0, detectorSizeX);
-  analysisManager->CreateH1("PosY1", "Y position hit in layer 1", 100, 0, detectorSizeY);
-  analysisManager->CreateH1("PosX2", "X position hit in layer 2", 100, 0, detectorSizeX);
-  analysisManager->CreateH1("PosY2", "Y position hit in layer 2", 100, 0, detectorSizeY);
-  analysisManager->CreateH1("PosX3", "X position hit in layer 3", 100, 0, detectorSizeX);
-  analysisManager->CreateH1("PosY3", "Y position hit in layer 3", 100, 0, detectorSizeY);
-  analysisManager->CreateH1("PosX4", "X position hit in layer 4", 100, 0, detectorSizeX);
-  analysisManager->CreateH1("PosY4", "Y position hit in layer 4", 100, 0, detectorSizeY);
+  analysisManager->CreateH1("PosX0", "X position hit in layer 0", 1000, 0, detectorSizeX);
+  analysisManager->CreateH1("PosY0", "Y position hit in layer 0", 1000, 0, detectorSizeY);
+  analysisManager->CreateH1("PosX1", "X position hit in layer 1", 1000, 0, detectorSizeX);
+  analysisManager->CreateH1("PosY1", "Y position hit in layer 1", 1000, 0, detectorSizeY);
+  analysisManager->CreateH1("PosX2", "X position hit in layer 2", 1000, 0, detectorSizeX);
+  analysisManager->CreateH1("PosY2", "Y position hit in layer 2", 1000, 0, detectorSizeY);
+  analysisManager->CreateH1("PosX3", "X position hit in layer 3", 1000, 0, detectorSizeX);
+  analysisManager->CreateH1("PosY3", "Y position hit in layer 3", 1000, 0, detectorSizeY);
+  analysisManager->CreateH1("PosX4", "X position hit in layer 4", 1000, 0, detectorSizeX);
+  analysisManager->CreateH1("PosY4", "Y position hit in layer 4", 1000, 0, detectorSizeY);
 
   analysisManager->CreateH2("Posxy0", "XY position hit in layer 0", 
                             100, 0, detectorSizeX, 100, 0, detectorSizeY,
@@ -118,37 +118,50 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 
 RunAction::~RunAction()
 {
-  delete _mutex;
-  delete _run_messager;
+  delete fRunMessager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-  auto analysisManager = G4AnalysisManager::Instance();
-  std::string output_root_dir = "./output";
+  G4cout << "OOOOOOOOOOOOOOOOOOOOO" << G4endl;
+  G4cout << "Begin run is here!" << G4endl;
+  if (fOpenFile)
+  {
+    auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+    auto analysisManager = G4AnalysisManager::Instance();
+    std::string output_root_dir = "./output";
 
-  std::ostringstream oss;
-  oss << std::setw(3) << std::setfill('0') << numOfRun;
-  std::ostringstream oss2;
-  oss2 << std::fixed << std::setprecision(2);
-  oss2 << det->GetPHangle();
+    std::ostringstream oss;
+    oss << std::setw(3) << std::setfill('0') << numOfRun;
+    std::ostringstream oss2;
+    oss2 << std::fixed << std::setprecision(2);
+    oss2 << det->GetPHangle();
 
-  analysisManager->OpenFile(output_root_dir + std::string("/run_") +
-    oss.str() + "_project_" + oss2.str() + std::string(".root"));
+    analysisManager->OpenFile(output_root_dir + std::string("/run_") +
+      oss.str() + "_project_" + oss2.str() + std::string(".root"));
+
+    fOpenFile = false;
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOo {_close_file = close_file;}oo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOo {fCloseFile = close_file;}oo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-  G4cout << "...... Finished in projection of " << det->GetPHangle() << " degree ......" << G4endl;
-  auto analysisManager = G4AnalysisManager::Instance();
-  analysisManager->Write();
-  analysisManager->CloseFile();
+  if (fMaxLength == 24.0 *cm)
+  {
+    G4cout << "OOOOOOOOOOOOOOOOOOOOO" << G4endl;
+    G4cout << "End run is here!" << G4endl;
+    auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+    G4cout << "...... Finished in projection of " << det->GetPHangle() << " degree ......" << G4endl;
+    auto analysisManager = G4AnalysisManager::Instance();
+    analysisManager->Write();
+    analysisManager->CloseFile();
+
+    fCloseFile = false;
+  }
 }
 
 
