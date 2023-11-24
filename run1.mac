@@ -53,5 +53,3 @@
 /gps/ene/sigma 0.1 MeV
 #/gps/ene/mono 744 MeV
 #/gps/ene/sigma 0.740 MeV
-
-/run/beamOn 100
