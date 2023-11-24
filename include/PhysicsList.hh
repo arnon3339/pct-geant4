@@ -32,9 +32,9 @@
 
 #include "G4VModularPhysicsList.hh"
 
+
 namespace PCT 
 {
-
 /// Modular physics list
 ///
 /// It includes the folowing physics builders
@@ -49,6 +49,7 @@ public:
   ~PhysicsList() override = default;
 
   void SetCuts() override;
+
 };
 
 }

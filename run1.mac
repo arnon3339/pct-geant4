@@ -13,6 +13,7 @@
 /run/verbose 0 
 /event/verbose 0
 /tracking/verbose 0 
+/run/setCutForRegion myPhantom 1.0 mm
 # 
 # gamma 6 MeV to the direction (0.,0.,1.)
 #
@@ -27,5 +28,30 @@
 #/gun/energy 210 MeV
 #/tracking/verbose 2
 #
-/det/rotate/angle 10
-/run/beamOn 10000
+
+/gps/pos/shape Circle
+/gps/pos/centre 0. 0. -42.1 cm
+/gps/pos/radius 0. mm
+/gps/pos/sigma_r 6.4 mm
+#for real
+#/gps/pos/sigma_r 3.2 mm
+/gps/particle proton
+#/gps/particle ion
+#/gps/ion 6 12 6
+/gps/pos/type Beam
+
+/gps/pos/rot1 1 0 0
+/gps/pos/rot2 0 1 0 
+
+/gps/ang/rot1 0 1 0 
+/gps/ang/rot2 1 0 0
+/gps/ang/type beam1d
+/gps/ang/sigma_r 0.0001 deg
+
+/gps/ene/type Gauss
+/gps/ene/mono 70.0 MeV
+/gps/ene/sigma 0.1 MeV
+#/gps/ene/mono 744 MeV
+#/gps/ene/sigma 0.740 MeV
+
+/run/beamOn 100

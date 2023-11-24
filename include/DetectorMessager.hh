@@ -6,7 +6,7 @@
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWith3VectorAndUnit;
-class G4UIcmdWithADouble;
+class G4UIcmdWithADoubleAndUnit;
 class G4UIcommand;
 
 namespace PCT
@@ -18,7 +18,7 @@ namespace PCT
       DetectorConstruction* fdet;
       G4UIdirectory*             fDirectory;
       G4UIdirectory*             fSubDirectory;
-      G4UIcmdWithADouble*        fSetAngleCmd;
+      G4UIcmdWithADoubleAndUnit*        fSetAngleCmd;
 
     public:
       DetectorMessager(DetectorConstruction*);

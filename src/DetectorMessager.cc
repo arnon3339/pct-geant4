@@ -5,6 +5,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcommand.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
 namespace PCT
 {
@@ -18,7 +19,7 @@ namespace PCT
     fSubDirectory->SetGuidance("Dector geometry rotation");
         
     fSetAngleCmd 
-      = new G4UIcmdWithADouble("/det/rotate/angle",this);
+      = new G4UIcmdWithADoubleAndUnit("/det/rotate/angle",this);
     fSetAngleCmd->SetGuidance("Input the angle (degree) for phantom rotation in TOP axis.");
     fSetAngleCmd->SetParameterName("Angle(Degree)", false);
     fSetAngleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
@@ -34,7 +35,9 @@ namespace PCT
   void DetectorMessager::SetNewValue(G4UIcommand* command, G4String newValue)
   {
     if( command == fSetAngleCmd ) {
-      fdet->RotatePhantom(std::stod(newValue));
+      auto inputValue = fSetAngleCmd->GetNewDoubleValue(newValue);
+      auto inputUnit = fSetAngleCmd->GetNewUnitValue(newValue);
+      fdet->RotatePhantom(inputValue*inputUnit);
     }
   }
 } // namespace PCT

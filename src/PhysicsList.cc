@@ -36,7 +36,11 @@
 #include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
+#include "G4LossTableManager.hh"
 #include "G4HadronPhysicsQGSP_BIC.hh"
+#include "G4SystemOfUnits.hh"
+#include "DetectorConstruction.hh"
+#include "G4RegionStore.hh"
 
 namespace PCT
 {
@@ -45,7 +49,6 @@ namespace PCT
 
 PhysicsList::PhysicsList()
 {
-
   // EM Physics
   RegisterPhysics( new G4EmStandardPhysics_option3());
 
@@ -70,6 +73,7 @@ PhysicsList::PhysicsList()
   // Neutron tracking cut
   RegisterPhysics( new G4NeutronTrackingCut());
 
+  // G4VUserPhysicsList::SetCutsForRegion(1.* mm, "myPhantom");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

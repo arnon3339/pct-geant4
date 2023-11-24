@@ -50,6 +50,7 @@
 #include "G4VisAttributes.hh"
 #include "G4PVReplica.hh"
 #include "G4Color.hh"
+#include "G4Region.hh"
 
 #include "CADMesh.hh"
 
@@ -116,10 +117,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     0,                                         // copy number
     checkOverlaps);                            // overlaps checking
 
-  G4ThreeVector frontTrackerPos = G4ThreeVector(0, 0, -25*cm);
-  G4ThreeVector rearTrackerPos = G4ThreeVector(0, 0, 25*cm);
-  G4int numAlpideX = 16;
-  G4int numAlpideY = 16;
+  G4ThreeVector frontTrackerPos = G4ThreeVector(0, 0, -22.5*cm);
+  G4ThreeVector rearTrackerPos = G4ThreeVector(0, 0, 22.5*cm);
+  // G4int numAlpideX = 16;
+  // G4int numAlpideY = 16;
+  G4int numAlpideX = 1;
+  G4int numAlpideY = 1;
   G4double alpideSizeX = 3.0 *cm;
   G4double alpideSizeY = 1.38 *cm;
   G4double alpideSizeZ = 100 *um;
@@ -323,7 +326,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     // Set Shape2 as scoring volume
     //
-    rMatrix->rotateY(0*3.14/180);
+    auto phReg = new G4Region("myPhantom");
+    phReg->AddRootLogicalVolume(phanLog);
+
+    // for aligned phantom
+    rMatrix->rotateY(0 *deg);
+
     phPhys = new G4PVPlacement(
       rMatrix,
       G4ThreeVector(0, 0, 0),
@@ -346,7 +354,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     auto runManager = G4RunManager::GetRunManager();
     phAngle = angle;
 
-    rMatrix->rotateY(phAngle*3.14/180); // Specify the rotation angle in radians
+    rMatrix->rotateY(phAngle); // Specify the rotation angle in radians
 
     phPhys->SetRotation(rMatrix);
 

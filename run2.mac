@@ -8,6 +8,8 @@
 #
 /control/verbose 2
 /run/verbose 2
+
+/run/setCutForRegion myPhantom 1.0 mm
 #
 # gamma 6 MeV to the direction (0.,0.,1.)
 # 10000 events

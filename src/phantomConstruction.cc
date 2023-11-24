@@ -9,6 +9,8 @@
 #include "G4RunManager.hh"
 #include "G4Element.hh"
 #include "G4Box.hh"
+#include "G4Tubs.hh"
+#include "G4RotationMatrix.hh"
 
 #include "CADMesh.hh"
 
@@ -25,6 +27,9 @@ namespace PCT
     mesh->SetScale(1000);
 
     G4ThreeVector pos1_5 = G4ThreeVector(0, 0, 0);
+
+    auto nonVis = new G4VisAttributes();
+    nonVis->SetVisibility(false);
 
     G4VisAttributes *C0vis = new G4VisAttributes();
     C0vis->SetVisibility(true);
@@ -105,7 +110,46 @@ namespace PCT
       phanMat["Teflon"],
       "boxLog"
     );
-    return C0log;
+
+
+    // small phantom
+    auto smPhWrapS = new G4Box("smPhWrapS", 1.5 *cm, 1.5 *cm, 1.5 *cm);
+    auto smPhWrapLV = new G4LogicalVolume(smPhWrapS, phanMat["Air"], "smPhWrapLV");
+    smPhWrapLV->SetVisAttributes(nonVis);
+    auto smPhS = new G4Tubs("smPhS", 0, 1.0 *cm, 0.5 *cm, 0 *deg, 360 *deg);
+    auto smPhLV = new G4LogicalVolume(smPhS, phanMat["Water"], "smPhLV");
+    smPhLV->SetVisAttributes(C0vis);
+    auto smPhInnerS = new G4Box("smPhInnerS", 0.4 *cm, 0.1 *cm, 0.4 *cm);
+    auto smPhInnerLV = new G4LogicalVolume(smPhInnerS, phanMat["Teflon"], "smPHInnerLV");
+    smPhInnerLV->SetVisAttributes(C1vis);
+
+    auto rMatrix = new G4RotationMatrix();
+    rMatrix->rotateX(90 *deg);
+
+    new G4PVPlacement(
+      rMatrix, 
+      G4ThreeVector(0, 0, 0),
+      smPhLV, 
+      "smPhWrapPV",
+      smPhWrapLV,
+      false,
+      0,
+      checkOverlaps
+    );
+
+    new G4PVPlacement(
+      nullptr,
+      G4ThreeVector(0, 0, 0),
+      smPhInnerLV,
+      "smPhPV",
+      smPhLV,
+      false,
+      0,
+      checkOverlaps 
+    );
+
+    // return C0log;
+    return smPhWrapLV;
     // return boxLog;
   }
 

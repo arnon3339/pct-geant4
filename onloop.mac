@@ -1,2 +1,2 @@
-/det/rotate/angle {angle}
-/run/beamOn 10000000
+/det/rotate/angle {angle} deg
+/run/beamOn 1000000
