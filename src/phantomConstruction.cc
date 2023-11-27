@@ -104,7 +104,7 @@ namespace PCT
         checkOverlaps);           // overlaps checking
     }
 
-    auto boxSol = new G4Box("boxSol", 20*cm, 10*cm, 4*cm);
+    auto boxSol = new G4Box("boxSol", 20*cm, 10*cm, 10*cm);
     auto boxLog = new G4LogicalVolume(
       boxSol,
       phanMat["Teflon"],
@@ -119,7 +119,7 @@ namespace PCT
     auto smPhS = new G4Tubs("smPhS", 0, 1.0 *cm, 0.5 *cm, 0 *deg, 360 *deg);
     auto smPhLV = new G4LogicalVolume(smPhS, phanMat["Water"], "smPhLV");
     smPhLV->SetVisAttributes(C0vis);
-    auto smPhInnerS = new G4Box("smPhInnerS", 0.4 *cm, 0.1 *cm, 0.4 *cm);
+    auto smPhInnerS = new G4Box("smPhInnerS", 0.8 *cm, 0.2 *cm, 0.5 *cm);
     auto smPhInnerLV = new G4LogicalVolume(smPhInnerS, phanMat["Teflon"], "smPHInnerLV");
     smPhInnerLV->SetVisAttributes(C1vis);
 
