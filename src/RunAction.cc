@@ -70,8 +70,8 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
   new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);
 
-  G4int numAlpideX = 16;
-  G4int numAlpideY = 16;
+  G4int numAlpideX = 1;
+  G4int numAlpideY = 1;
   G4double alpideSizeX = 3.0 *cm;
   G4double alpideSizeY = 1.38 *cm;
   G4double detectorSizeX = (numAlpideX*alpideSizeX);
@@ -146,7 +146,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-  G4cout << "...... Finished in projection of " << det->GetPHangle() << " degree ......" << G4endl;
+  G4cout << "...... Finished in projection of " << det->GetPHangle()/deg << " degree ......" << G4endl;
   auto analysisManager = G4AnalysisManager::Instance();
   analysisManager->Write();
   analysisManager->CloseFile();
