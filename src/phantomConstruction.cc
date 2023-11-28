@@ -116,8 +116,8 @@ namespace PCT
     auto smPhWrapS = new G4Box("smPhWrapS", 1.5 *cm, 1.5 *cm, 1.5 *cm);
     auto smPhWrapLV = new G4LogicalVolume(smPhWrapS, phanMat["Air"], "smPhWrapLV");
     smPhWrapLV->SetVisAttributes(nonVis);
-    auto smPhS = new G4Tubs("smPhS", 0, 1.0 *cm, 0.5 *cm, 0 *deg, 360 *deg);
-    auto smPhLV = new G4LogicalVolume(smPhS, phanMat["Water"], "smPhLV");
+    auto smPhS = new G4Tubs("smPhS", 0, 1.0 *cm, 10 *cm, 0 *deg, 360 *deg);
+    auto smPhLV = new G4LogicalVolume(smPhS, phanMat["Air"], "smPhLV");
     smPhLV->SetVisAttributes(C0vis);
     auto smPhInnerS = new G4Box("smPhInnerS", 0.8 *cm, 0.2 *cm, 0.5 *cm);
     auto smPhInnerLV = new G4LogicalVolume(smPhInnerS, phanMat["Teflon"], "smPHInnerLV");

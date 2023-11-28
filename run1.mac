@@ -49,7 +49,7 @@
 /gps/ang/sigma_r 0.0001 deg
 
 /gps/ene/type Gauss
-/gps/ene/mono 30.0 MeV
+/gps/ene/mono 50.0 MeV
 /gps/ene/sigma 0.1 MeV
 #/gps/ene/mono 744 MeV
 #/gps/ene/sigma 0.740 MeV
