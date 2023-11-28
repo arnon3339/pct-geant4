@@ -34,7 +34,7 @@
 /gps/pos/radius 0. mm
 /gps/pos/sigma_r 6.4 mm
 #for real
-#/gps/pos/sigma_r 3.2 mm
+#/gps/pos/sigma_r 6.2 mm
 /gps/particle proton
 #/gps/particle ion
 #/gps/ion 6 12 6
@@ -49,7 +49,7 @@
 /gps/ang/sigma_r 0.0001 deg
 
 /gps/ene/type Gauss
-/gps/ene/mono 50.0 MeV
+/gps/ene/mono 220.0 MeV
 /gps/ene/sigma 0.1 MeV
 #/gps/ene/mono 744 MeV
 #/gps/ene/sigma 0.740 MeV

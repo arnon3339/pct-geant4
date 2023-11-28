@@ -121,8 +121,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4ThreeVector rearTrackerPos = G4ThreeVector(0, 0, 22.5*cm);
   // G4int numAlpideX = 16;
   // G4int numAlpideY = 16;
-  G4int numAlpideX = 1;
-  G4int numAlpideY = 1;
+  G4int numAlpideX = 5;
+  G4int numAlpideY = 5;
   G4double alpideSizeX = 3.0 *cm;
   G4double alpideSizeY = 1.38 *cm;
   G4double alpideSizeZ = 100 *um;
@@ -330,7 +330,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     phReg->AddRootLogicalVolume(phanLog);
 
     // for aligned phantom
-    rMatrix->rotateY(0);
+    // phAngle = 90 *deg;
+    rMatrix->rotateY(phAngle);
 
     phPhys = new G4PVPlacement(
       rMatrix,
