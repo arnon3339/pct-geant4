@@ -56,6 +56,7 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 namespace PCT
 {
@@ -353,13 +354,19 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   void DetectorConstruction::RotatePhantom(G4double angle)
   {
     auto runManager = G4RunManager::GetRunManager();
-    phAngle = angle;
 
+    rMatrix->rotateY(-phAngle);
+    phAngle = angle;
     rMatrix->rotateY(phAngle); // Specify the rotation angle in radians
 
     phPhys->SetRotation(rMatrix);
 
     runManager->GeometryHasBeenModified();
+
+    auto angleFileLogs = new std::ofstream();
+    angleFileLogs->open("./anglelogs.txt", std::fstream::app);
+    (*angleFileLogs) << (int)(phAngle*180/3.14) << std::endl;
+    angleFileLogs->close();
   }
 
   void DetectorConstruction::ConstructSDandField()

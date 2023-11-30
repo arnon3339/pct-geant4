@@ -53,6 +53,7 @@ set(EXAMPLEPCT_SCRIPTS
   plotNtuple.C
   run_loop.mac
   onloop.mac
+  anglelogs.txt
   )
 
 set(PCT_DIRECTORY_SCRIPTS

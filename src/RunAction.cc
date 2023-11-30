@@ -133,12 +133,12 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   std::ostringstream oss;
   oss << std::setw(3) << std::setfill('0') << numOfRun;
-  std::ostringstream oss2;
-  oss2 << std::fixed << std::setprecision(2);
-  oss2 << det->GetPHangle();
+  // std::ostringstream oss2;
+  // oss2 << std::fixed << std::setprecision(3);
+  // oss2 << (int)det->GetPHangle()/deg;
 
   analysisManager->OpenFile(output_root_dir + std::string("/run_") +
-    oss.str() + "_project_" + oss2.str() + std::string(".root"));
+    oss.str() + "_project_" + std::to_string((int)(det->GetPHangle()*180/3.14)) + std::string(".root"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOo {_close_file = close_file;}oo........oooOO0OOooo......
@@ -146,7 +146,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-  G4cout << "...... Finished in projection of " << det->GetPHangle()/deg << " degree ......" << G4endl;
+  G4cout << "...... Finished in projection of " << std::to_string((int)(det->GetPHangle()*180/3.14)) << " degree ......" << G4endl;
   auto analysisManager = G4AnalysisManager::Instance();
   analysisManager->Write();
   analysisManager->CloseFile();
