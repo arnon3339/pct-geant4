@@ -49,7 +49,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   private:
     DetectorMessager* detMessager;
     G4LogicalVolume* phanLog;
-    G4RotationMatrix* rMatrix;
     G4double phAngle;
     G4LogicalVolume* worldLog;
     G4VPhysicalVolume* phPhys;

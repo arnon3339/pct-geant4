@@ -61,10 +61,8 @@
 namespace PCT
 {
   DetectorConstruction::DetectorConstruction()
-  :detMessager(0), phanLog(0), rMatrix(0), phAngle(0), worldLog(0), phPhys(0)
+  :detMessager(0), phanLog(0), phAngle(0), worldLog(0), phPhys(0)
   {
-    rMatrix = new G4RotationMatrix();
-    rMatrix->rotateY(0);
     auto phantom = new PhantomConstruction();
     phanLog = phantom->getLogVolume();
     detMessager = new DetectorMessager(this);
@@ -73,7 +71,6 @@ namespace PCT
   DetectorConstruction::~DetectorConstruction()
   {
     delete phPhys;
-    delete rMatrix;
     delete phanLog;
     delete detMessager;
   }
@@ -120,10 +117,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4ThreeVector frontTrackerPos = G4ThreeVector(0, 0, -22.5*cm);
   G4ThreeVector rearTrackerPos = G4ThreeVector(0, 0, 22.5*cm);
-  // G4int numAlpideX = 16;
-  // G4int numAlpideY = 16;
-  G4int numAlpideX = 5;
-  G4int numAlpideY = 5;
+  G4int numAlpideX = 16;
+  G4int numAlpideY = 16;
   G4double alpideSizeX = 3.0 *cm;
   G4double alpideSizeY = 1.38 *cm;
   G4double alpideSizeZ = 100 *um;
@@ -332,7 +327,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     // for aligned phantom
     // phAngle = 90 *deg;
-    rMatrix->rotateY(phAngle);
+    auto rMatrix = new G4RotationMatrix();;
+    rMatrix->rotateY(30*deg);
 
     phPhys = new G4PVPlacement(
       rMatrix,
@@ -354,8 +350,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   void DetectorConstruction::RotatePhantom(G4double angle)
   {
     auto runManager = G4RunManager::GetRunManager();
-
-    rMatrix->rotateY(-phAngle);
+    auto rMatrix = new G4RotationMatrix();;
     phAngle = angle;
     rMatrix->rotateY(phAngle); // Specify the rotation angle in radians
 
@@ -363,10 +358,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
     runManager->GeometryHasBeenModified();
 
-    auto angleFileLogs = new std::ofstream();
-    angleFileLogs->open("./anglelogs.txt", std::fstream::app);
-    (*angleFileLogs) << (int)(phAngle*180/3.14) << std::endl;
-    angleFileLogs->close();
+    // auto angleFileLogs = new std::ofstream();
+    // angleFileLogs->open("./anglelogs.txt", std::fstream::app);
+    // (*angleFileLogs) << (int)(phAngle*180/3.14) << std::endl;
+    // angleFileLogs->close();
   }
 
   void DetectorConstruction::ConstructSDandField()

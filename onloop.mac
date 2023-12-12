@@ -1,2 +1,3 @@
 /det/rotate/angle {angle} deg
+/random/setSeeds 12345
 /run/beamOn 1000000

@@ -36,7 +36,6 @@ namespace PCT
   {
     if( command == fSetAngleCmd ) {
       auto inputValue = fSetAngleCmd->GetNewDoubleValue(newValue);
-      auto inputUnit = fSetAngleCmd->GetNewUnitValue(newValue);
       fdet->RotatePhantom(inputValue);
     }
   }

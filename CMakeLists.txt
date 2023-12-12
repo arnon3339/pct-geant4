@@ -54,6 +54,8 @@ set(EXAMPLEPCT_SCRIPTS
   run_loop.mac
   onloop.mac
   anglelogs.txt
+  parallelbeam.mac
+  gaussianbeam.mac
   )
 
 set(PCT_DIRECTORY_SCRIPTS

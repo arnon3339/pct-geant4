@@ -24,8 +24,13 @@ namespace PCT
     genMat(phanMat);
     G4bool checkOverlaps = true;
     auto mesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/ctp404.obj");
+    auto brainMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_brain_center.obj");
+    auto hearthMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_hearth_center.obj");
+    auto lungMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_lung_center.obj");
     mesh->SetScale(1000);
-
+    brainMesh->SetScale(1000);
+    hearthMesh->SetScale(1000);
+    lungMesh->SetScale(1000);
     G4ThreeVector pos1_5 = G4ThreeVector(0, 0, 0);
 
     auto nonVis = new G4VisAttributes();
@@ -104,22 +109,14 @@ namespace PCT
         checkOverlaps);           // overlaps checking
     }
 
-    auto boxSol = new G4Box("boxSol", 20*cm, 10*cm, 10*cm);
-    auto boxLog = new G4LogicalVolume(
-      boxSol,
-      phanMat["Teflon"],
-      "boxLog"
-    );
-
-
     // small phantom
-    auto smPhWrapS = new G4Box("smPhWrapS", 10 *cm, 10 *cm, 10 *cm);
+    auto smPhWrapS = new G4Box("smPhWrapS", 12 *cm, 12 *cm, 12 *cm);
     auto smPhWrapLV = new G4LogicalVolume(smPhWrapS, phanMat["Air"], "smPhWrapLV");
     smPhWrapLV->SetVisAttributes(nonVis);
-    auto smPhS = new G4Tubs("smPhS", 0, 10.0 *cm, 10.0 *cm, 0 *deg, 360 *deg);
+    auto smPhS = new G4Tubs("smPhS", 0, 10.0 *cm, 5.0 *cm, 0 *deg, 360 *deg);
     auto smPhLV = new G4LogicalVolume(smPhS, phanMat["Water"], "smPhLV");
     smPhLV->SetVisAttributes(C0vis);
-    auto smPhInnerS = new G4Box("smPhInnerS", 10 *cm, 0.5 *cm, 5 *cm);
+    auto smPhInnerS = new G4Box("smPhInnerS", 8 *cm, 2 *cm, 2 *cm);
     auto smPhInnerLV = new G4LogicalVolume(smPhInnerS, phanMat["Teflon"], "smPHInnerLV");
     smPhInnerLV->SetVisAttributes(C1vis);
 
@@ -147,6 +144,13 @@ namespace PCT
       0,
       checkOverlaps 
     );
+
+    // hearth phantom
+    auto hearthLV = new G4LogicalVolume(hearthMesh->GetSolid(0), phanMat["hearthwall"], "hearthLV");
+    // hearth phantom
+    auto brainLV = new G4LogicalVolume(brainMesh->GetSolid(0), phanMat["brain"], "brainhLV");
+    // hearth phantom
+    auto lungLV = new G4LogicalVolume(lungMesh->GetSolid(0), phanMat["lung"], "lungLV");
 
     // return C0log;
     return smPhWrapLV;
@@ -209,6 +213,43 @@ namespace PCT
     m_ramp->AddElementByMassFraction(nist->FindOrBuildElement("K"), 0.1/100);
     m_ramp->AddElementByMassFraction(nist->FindOrBuildElement("Ca"), 8.8/100);
     mat.insert({std::string("Ramp"), m_ramp});
+
+    G4Material *m_hearthwall = new G4Material("heartWall", 1.051*g/cm3, 9);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("H"), 10.4/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("C"), 13.5/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("N"), 2.9/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("O"), 72.3/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("Na"), 0.1/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("P"), 0.2/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("S"), 0.2/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("Cl"), 0.2/100);
+    m_hearthwall->AddElementByMassFraction(nist->FindOrBuildElement("K"), 0.3/100);
+    mat.insert({std::string("hearthwall"), m_hearthwall});
+
+    G4Material *m_brain = new G4Material("brain", 1.041*g/cm3, 9);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("H"), 10.7/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("C"), 14.3/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("N"), 2.3/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("O"), 71.3/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("Na"), 0.2/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("P"), 0.4/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("S"), 0.2/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("Cl"), 0.3/100);
+    m_brain->AddElementByMassFraction(nist->FindOrBuildElement("K"), 0.3/100);
+    mat.insert({std::string("brain"), m_brain});
+
+    G4Material *m_lung = new G4Material("lung", 0.415*g/cm3, 10);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("H"), 10.2/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("C"), 10.8/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("N"), 3.2/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("O"), 74.8/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("Na"), 0.1/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("P"), 0.1/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("S"), 0.2/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("Cl"), 0.3/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("K"), 0.2/100);
+    m_lung->AddElementByMassFraction(nist->FindOrBuildElement("Fe"), 0.1/100);
+    mat.insert({std::string("lung"), m_lung});
 
   }
 } // namespace PCT

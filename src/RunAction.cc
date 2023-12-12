@@ -31,7 +31,6 @@
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"
-#include "RunMessager.hh"
 // #include "Run.hh"
 
 #include "G4RunManager.hh"
@@ -58,8 +57,6 @@ namespace PCT
 
 RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 {
-  _run_messager = new RunMessager(this);
-
   const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
   const G4double nanogray  = 1.e-9*gray;
@@ -70,8 +67,8 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
   new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
   new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);
 
-  G4int numAlpideX = 5;
-  G4int numAlpideY = 5;
+  G4int numAlpideX = 16;
+  G4int numAlpideY = 16;
   G4double alpideSizeX = 3.0 *cm;
   G4double alpideSizeY = 1.38 *cm;
   G4double detectorSizeX = (numAlpideX*alpideSizeX);
@@ -119,8 +116,6 @@ RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
 
 RunAction::~RunAction()
 {
-  delete _mutex;
-  delete _run_messager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -65,14 +65,12 @@ void EventAction::EndOfEventAction(const G4Event* event)
 {
   // get number of stored trajectories
   currentLayer = -1;
-  G4int numAlpideX = 5;
-  G4int numAlpideY = 5;
+  G4int numAlpideX = 16;
+  G4int numAlpideY = 16;
   G4double alpideSizeX = 3.0 *cm;
   G4double alpideSizeY = 1.38 *cm;
   G4double detectorSizeX = (numAlpideX*alpideSizeX);
   G4double detectorSizeY = (numAlpideY*alpideSizeY);
-
-  G4int activeLayers[5]{0};
 
   G4int eventID = event->GetEventID();
   auto analysisManager = G4AnalysisManager::Instance();
