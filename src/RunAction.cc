@@ -128,8 +128,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   auto analysisManager = G4AnalysisManager::Instance();
   fs::path out = "./output";
   if (fUnknow){
-    fs::path filePath = std::to_string(det->GetPhIndex());
-    out = out / fs::path("unknow") / filePath;
+    fs::path filePath = std::string("unknow_") + std::to_string(det->GetPhIndex());
+    out = out / filePath;
   }
   else{
     fs::path filePath = det->GetPhName();
@@ -139,7 +139,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
     fs::create_directories(out);
   } catch (const fs::filesystem_error& e) {
   }
-  analysisManager->OpenFile(out.c_str() + std::string("projection_") +
+  analysisManager->OpenFile(out.c_str() + std::string("/projection_") +
    std::to_string((int)(det->GetPHangle()*180/3.14))
    + std::string(".root"));
 }
