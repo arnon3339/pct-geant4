@@ -43,19 +43,40 @@
 
 #include "Randomize.hh"
 
+#include <argparse/argparse.hpp>
+#include <string>
+
 using namespace PCT;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
+  argparse::ArgumentParser program("examplePCT"); 
+
+  program.add_argument("--seed")
+    .help("The seed number.")
+    .default_value(0)
+    .scan<'i', int>();
+    
+
+  program.add_argument("--macro")
+    .help("The macro file")
+    .default_value("init_vis.mac");
+  
+  program.add_argument("--phantom")
+    .help("The phantom name.")
+    .default_value("catphan404");
+  
+  std::string macro_file(program.get("--macro"));
+  std::string default_macro("init_vis.mac");
+
   // Detect interactive mode (if no arguments) and define UI session
   //
   G4UIExecutive* ui = nullptr;
-  if ( argc == 1 ) { ui = new G4UIExecutive(argc, argv); }
+  if ( !macro_file.compare(default_macro) ) { ui = new G4UIExecutive(argc, argv); }
 
-  const G4int runNum = (argc == 3 && std::atoi(argv[2]) > 0) ? std::atoi(argv[2]) : 0;
-
+  const G4int runNum = program.get<int>("--seed");
   // Optionally: choose a different Random engine...
   // G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
@@ -73,7 +94,8 @@ int main(int argc,char** argv)
   // Set mandatory initialization classes
   //
   // Detector construction
-  runManager->SetUserInitialization(new DetectorConstruction());
+  G4String phName = program.get("--phantom");
+  runManager->SetUserInitialization(new DetectorConstruction(phName));
 
   // Physics list
   // G4VModularPhysicsList* physicsList = new QBBC;
@@ -97,7 +119,7 @@ int main(int argc,char** argv)
   if ( ! ui ) {
     // batch mode
     G4String command = "/control/execute ";
-    G4String fileName = argv[1];
+    G4String fileName = macro_file.c_str();
     UImanager->ApplyCommand(command+fileName);
   }
   else {

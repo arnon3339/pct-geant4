@@ -57,14 +57,15 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <filesystem>
 
 namespace PCT
 {
-  DetectorConstruction::DetectorConstruction()
+  DetectorConstruction::DetectorConstruction(G4String phName)
   :detMessager(0), phanLog(0), phAngle(0), worldLog(0), phPhys(0)
   {
-    auto phantom = new PhantomConstruction();
-    phanLog = phantom->getLogVolume();
+    auto phantom = new PhantomConstruction(phName);
+    phanLog = phantom->GetLogVolume();
     detMessager = new DetectorMessager(this);
   }
 
@@ -326,9 +327,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     phReg->AddRootLogicalVolume(phanLog);
 
     // for aligned phantom
-    // phAngle = 90 *deg;
+    phAngle = 90 *deg;
     auto rMatrix = new G4RotationMatrix();;
-    rMatrix->rotateY(30*deg);
+    rMatrix->rotateY(phAngle);
 
     phPhys = new G4PVPlacement(
       rMatrix,

@@ -32,6 +32,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4RotationMatrix.hh"
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
@@ -54,7 +55,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* phPhys;
 
   public:
-    DetectorConstruction();
+    DetectorConstruction(G4String);
     ~DetectorConstruction();
 
     G4VPhysicalVolume* Construct() override;
