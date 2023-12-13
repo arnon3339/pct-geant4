@@ -62,10 +62,10 @@
 namespace PCT
 {
   DetectorConstruction::DetectorConstruction(G4String phName)
-  :detMessager(0), phanLog(0), phAngle(0), worldLog(0), phPhys(0)
+  :detMessager(0), phanLog(0), phAngle(0), worldLog(0), phPhys(0), ph(0)
   {
-    auto phantom = new PhantomConstruction(phName);
-    phanLog = phantom->GetLogVolume();
+    ph = new PhantomConstruction(phName);
+    phanLog = ph->GetLogVolume();
     detMessager = new DetectorMessager(this);
   }
 
@@ -74,7 +74,16 @@ namespace PCT
     delete phPhys;
     delete phanLog;
     delete detMessager;
+    delete ph;
   }
+
+G4int DetectorConstruction::GetPhIndex(){
+  return ph->GetPhIndex();
+}
+
+G4String DetectorConstruction::GetPhName(){
+  return ph->GetPhName();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* DetectorConstruction::Construct()

@@ -23,7 +23,8 @@ namespace PCT
     delete phLV;
   }
 
-  PhantomConstruction::PhantomConstruction(G4String phName){
+  PhantomConstruction::PhantomConstruction(G4String phName):
+  fPhIndex(0), fPhName(phName){
     genMat(phanMat);
 
     G4bool checkOverlaps = true;
@@ -39,6 +40,7 @@ namespace PCT
     C1vis->SetColor(G4Color(1.0, 0, 0, 0.75));
 
     if (!phName.compare(refPhantoms.at(0))){
+      fPhIndex = 0;
       auto mesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/ctp404.obj");
       mesh->SetScale(1000);
       G4ThreeVector pos1_5 = G4ThreeVector(0, 0, 0);
@@ -110,6 +112,7 @@ namespace PCT
       phLV = C0log;
     }
     else if (!phName.compare(refPhantoms.at(1))){
+      phIndex = 1;
       // heart phantom
       auto brainMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_brain_center.obj");
       brainMesh->SetScale(100);
@@ -117,6 +120,7 @@ namespace PCT
       phLV = brainLV;
     }
     else if (!phName.compare(refPhantoms.at(2))){
+      phIndex = 2;
       // heart phantom
       auto heartMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_heart_center.obj");
       heartMesh->SetScale(100);
@@ -124,6 +128,7 @@ namespace PCT
       phLV = heartLV;
     }
     else if (!phName.compare(refPhantoms.at(3))){
+      phIndex = 3;
       // lung phantom
       auto lungMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_lung_center.obj");
       lungMesh->SetScale(100);
@@ -131,6 +136,7 @@ namespace PCT
       phLV = lungLV;
     }
     else{
+      phIndex = 4;
       // small phantom
       auto smPhWrapS = new G4Box("smPhWrapS", 12 *cm, 12 *cm, 12 *cm);
       auto smPhWrapLV = new G4LogicalVolume(smPhWrapS, phanMat["Air"], "smPhWrapLV");

@@ -53,6 +53,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     G4double phAngle;
     G4LogicalVolume* worldLog;
     G4VPhysicalVolume* phPhys;
+    PhantomConstruction* ph;
 
   public:
     DetectorConstruction(G4String);
@@ -63,6 +64,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     void RotatePhantom(G4double);
     G4double GetPHangle() {return phAngle;};
+
+    G4int GetPhIndex();
+    G4String GetPhName();
+
 };
 
 }

@@ -50,12 +50,14 @@
 #include <sstream>
 #include <fstream>
 
+namespace fs = std::filesystem;
 namespace PCT
 {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(const G4int& numRun):numOfRun(numRun)
+RunAction::RunAction(const G4int& numRun, const G4String outPath, const bool unknow)
+:numOfRun(numRun), fOutPath(outPath), fUnknow(unknow)
 {
   const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
@@ -124,16 +126,22 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
   auto det = (DetectorConstruction*)G4RunManager::GetRunManager()->GetUserDetectorConstruction();
   auto analysisManager = G4AnalysisManager::Instance();
-  std::string output_root_dir = "./output";
-
-  std::ostringstream oss;
-  oss << std::setw(3) << std::setfill('0') << numOfRun;
-  // std::ostringstream oss2;
-  // oss2 << std::fixed << std::setprecision(3);
-  // oss2 << (int)det->GetPHangle()/deg;
-
-  analysisManager->OpenFile(output_root_dir + std::string("/run_") +
-    oss.str() + "_project_" + std::to_string((int)(det->GetPHangle()*180/3.14)) + std::string(".root"));
+  fs::path out = "./output";
+  if (fUnknow){
+    fs::path filePath = std::to_string(det->GetPhIndex());
+    out = out / fs::path("unknow") / filePath;
+  }
+  else{
+    fs::path filePath = det->GetPhName();
+    out = out / filePath;
+  }
+  try {
+    fs::create_directories(out);
+  } catch (const fs::filesystem_error& e) {
+  }
+  analysisManager->OpenFile(out.c_str() + std::string("projection_") +
+   std::to_string((int)(det->GetPHangle()*180/3.14))
+   + std::string(".root"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOo {_close_file = close_file;}oo........oooOO0OOooo......

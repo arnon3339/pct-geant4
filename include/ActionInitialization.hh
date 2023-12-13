@@ -43,8 +43,10 @@ class ActionInitialization : public G4VUserActionInitialization
 {
   private:
     const G4int fRunNum;
+    const G4String fOutPath;
+    const bool fUnknow;
   public:
-    ActionInitialization(const G4int&);
+    ActionInitialization(const G4int&, const G4String, const bool);
     ActionInitialization() = default;
     ~ActionInitialization() override = default;
 

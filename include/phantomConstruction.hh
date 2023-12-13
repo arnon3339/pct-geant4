@@ -17,6 +17,8 @@ namespace PCT
     void genMat(std::map<std::string, G4Material*> &mat);
     std::map<std::string, G4Material*> phanMat;
     G4LogicalVolume* phLV;
+    G4int fPhIndex;
+    G4String fPhName;
     const std::array<const std::string, 5> refPhantoms = {
     "catphan404",
     "brain",
@@ -32,6 +34,13 @@ namespace PCT
     inline G4LogicalVolume *GetLogVolume(){
       return phLV;
     }
+    inline G4int GetPhIndex(){
+      return fPhIndex;
+    }
+    inline G4String GetPhName(){
+      return fPhName;
+    }
+
   };
 } // namespace PCT
 

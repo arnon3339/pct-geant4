@@ -67,6 +67,17 @@ int main(int argc,char** argv)
   program.add_argument("--phantom")
     .help("The phantom name.")
     .default_value("catphan404");
+
+  program.add_argument("--output")
+    .help("The output path.")
+    .default_value("./output/");
+
+  program.add_argument("--unknow")
+    .help("The unknow phantom.")
+    .default_value(false)
+    .implicit_value(true);
+
+  program.parse_args(argc, argv);
   
   std::string macro_file(program.get("--macro"));
   std::string default_macro("init_vis.mac");
@@ -103,7 +114,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new PhysicsList);
 
   // User action initialization
-  runManager->SetUserInitialization(new ActionInitialization(runNum));
+  G4String outputPath = program.get("--output");
+  runManager->SetUserInitialization(new ActionInitialization(
+    runNum, outputPath, program["--unknow"] == true)
+    );
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;

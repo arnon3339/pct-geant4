@@ -54,11 +54,13 @@ class RunAction : public G4UserRunAction
 {
   private:
     const G4int& numOfRun;
+    const G4String fOutPath;
+    const bool fUnknow;
     G4bool  _close_file{false};
 
   public:
     RunAction() = default;
-    RunAction(const G4int&);
+    RunAction(const G4int&, const G4String, const bool);
     ~RunAction();
 
     void BeginOfRunAction(const G4Run*) override;
