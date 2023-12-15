@@ -36,7 +36,7 @@ cmake .. && make -j<number of threads>
 #### 2.4.1 Vis mode
 
 ```text
-./examplePCT
+./examplePCT --output <output path> --phantom <phatom name>
 ```
 
 The result of runBeam will be generated to /build/output directory for single rotation of phantom.
@@ -44,16 +44,18 @@ The result of runBeam will be generated to /build/output directory for single ro
 #### 2.4.2 Batch mode
 
 ```text
-./examplePCT run_loop.mac <run number>
+./examplePCT --macro run_loop.mac --output <output path> --phantom <phatom name>
 ```
 
-The result of runBeam will be generated to /build/output directory for 0 - 90 degree in phantom ratation.
+The result of runBeam will be generated to /build/output directory for 0 - 180 degree in phantom ratation.
 
-- The *<run number\>* is an optional. If you speficy it, it will create result directory corresponding to that number.
+Phantom names can be use as *.obj* file in phantom directory with out format subfix.
+
+Without running options, the running options will be default values.
 
 ## 3. Results
 
-The result description of batch mode is in *readme.txt*.
+Without using *--output* option, the output data will be in ./output of build directory.
 
 ## 4. Configure the simulation
 

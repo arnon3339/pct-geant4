@@ -114,7 +114,7 @@ namespace PCT
     else if (!phName.compare(refPhantoms.at(1))){
       fPhIndex = 1;
       // heart phantom
-      auto brainMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_brain_center.obj");
+      auto brainMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/brain.obj");
       brainMesh->SetScale(100);
       auto brainLV = new G4LogicalVolume(brainMesh->GetSolid(0), phanMat["brain"], "brainhLV");
       phLV = brainLV;
@@ -122,7 +122,7 @@ namespace PCT
     else if (!phName.compare(refPhantoms.at(2))){
       fPhIndex = 2;
       // heart phantom
-      auto heartMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_heart_center.obj");
+      auto heartMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/heart.obj");
       heartMesh->SetScale(100);
       auto heartLV = new G4LogicalVolume(heartMesh->GetSolid(0), phanMat["heartwall"], "heartLV");
       phLV = heartLV;
@@ -130,7 +130,7 @@ namespace PCT
     else if (!phName.compare(refPhantoms.at(3))){
       fPhIndex = 3;
       // lung phantom
-      auto lungMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_male_lung_center.obj");
+      auto lungMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/lung.obj");
       lungMesh->SetScale(100);
       auto lungLV = new G4LogicalVolume(lungMesh->GetSolid(0), phanMat["lung"], "lungLV");
       phLV = lungLV;
