@@ -49,7 +49,7 @@ The result of runBeam will be generated to /build/output directory for single ro
 
 The result of runBeam will be generated to /build/output directory for 0 - 180 degree in phantom ratation.
 
-Phantom names can be use as *.obj* file in phantom directory with out format subfix.
+Phantom names can be use as *.obj* file in phantom directory with out format suffix.
 
 Without running options, the running options will be default values.
 
