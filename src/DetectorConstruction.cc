@@ -336,7 +336,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     phReg->AddRootLogicalVolume(phanLog);
 
     // for aligned phantom
-    phAngle = 90 *deg;
+    phAngle = -180 *deg;
     auto rMatrix = new G4RotationMatrix();;
     rMatrix->rotateY(phAngle);
 
