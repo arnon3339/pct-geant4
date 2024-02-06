@@ -135,8 +135,16 @@ namespace PCT
       auto lungLV = new G4LogicalVolume(lungMesh->GetSolid(0), phanMat["lung"], "lungLV");
       phLV = lungLV;
     }
-    else{
+    else if (!phName.compare(refPhantoms.at(4))){
       fPhIndex = 4;
+      // lung phantom
+      auto headMesh = CADMesh::TessellatedMesh::FromOBJ("./phantom/phantom_inner_center_male_head_2.obj");
+      headMesh->SetScale(100);
+      auto headLV = new G4LogicalVolume(headMesh->GetSolid(0), phanMat["lung"], "lungLV");
+      phLV = headLV;
+    }
+    else{
+      fPhIndex = 5;
       // small phantom
       auto smPhWrapS = new G4Box("smPhWrapS", 12 *cm, 12 *cm, 12 *cm);
       auto smPhWrapLV = new G4LogicalVolume(smPhWrapS, phanMat["Air"], "smPhWrapLV");
@@ -144,9 +152,9 @@ namespace PCT
       auto smPhS = new G4Tubs("smPhS", 0, 10.0 *cm, 5.0 *cm, 0 *deg, 360 *deg);
       auto smPhLV = new G4LogicalVolume(smPhS, phanMat["Water"], "smPhLV");
       smPhLV->SetVisAttributes(C0vis);
-      auto smPhInnerS = new G4Box("smPhInnerS", 8 *cm, 2 *cm, 2 *cm);
-      auto smPhInnerLV = new G4LogicalVolume(smPhInnerS, phanMat["Teflon"], "smPHInnerLV");
-      smPhInnerLV->SetVisAttributes(C1vis);
+      // auto smPhInnerS = new G4Box("smPhInnerS", 8 *cm, 2 *cm, 2 *cm);
+      // auto smPhInnerLV = new G4LogicalVolume(smPhInnerS, phanMat["Teflon"], "smPHInnerLV");
+      // smPhInnerLV->SetVisAttributes(C1vis);
 
       auto rMatrix = new G4RotationMatrix();
       rMatrix->rotateX(90 *deg);
@@ -162,16 +170,16 @@ namespace PCT
         checkOverlaps
       );
 
-      new G4PVPlacement(
-        nullptr,
-        G4ThreeVector(0, 0, 0),
-        smPhInnerLV,
-        "smPhPV",
-        smPhLV,
-        false,
-        0,
-        checkOverlaps 
-      );
+      // new G4PVPlacement(
+      //   nullptr,
+      //   G4ThreeVector(0, 0, 0),
+      //   smPhInnerLV,
+      //   "smPhPV",
+      //   smPhLV,
+      //   false,
+      //   0,
+      //   checkOverlaps 
+      // );
     phLV = smPhWrapLV;
     }
   }
@@ -406,5 +414,19 @@ namespace PCT
     m_lung->AddElementByMassFraction(nist->FindOrBuildElement("Fe"), 0.1/100);
     mat.insert({std::string("lung"), m_lung});
 
+    G4Material *m_ET = new G4Material("ET", 1.031*g/cm3, 9);
+    mat.insert({std::string("ET"), m_ET});
+    G4Material *m_aqueous = new G4Material("Aqueous", 1.025*g/cm3, 4);
+    mat.insert({std::string("aqueous"), m_aqueous});
+    G4Material *m_cornea = new G4Material("Cornea", 1.100*g/cm3, 8);
+    mat.insert({std::string("cornea"), m_cornea});
+    G4Material *m_cranium = new G4Material("Cranium", 1.165*g/cm3, 11);
+    mat.insert({std::string("cranium"), m_cranium});
+    G4Material *m_eye = new G4Material("Eye", 1.060*g/cm3, 8);
+    mat.insert({std::string("eye"), m_eye});
+    G4Material *m_pituitary = new G4Material("Pituitary", 1.031*g/cm3, 9);
+    mat.insert({std::string("pituitary"), m_pituitary});
+    G4Material *m_vitreous = new G4Material("Vitreous", 1.031*g/cm3, 4);
+    mat.insert({std::string("vitreous"), m_vitreous});
   }
 } // namespace PCT
